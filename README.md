@@ -23,6 +23,7 @@
   - fileManager.js — quản lý file, render list, upload, drag/drop, viewer
 - styles/
   - dashboard.css — giao diện (modal viewer responsive)
+  - index.css - giao diện trang đăng ký/đăng nhập
 - Lưu trữ: toàn bộ dữ liệu nằm trong localStorage
 
 ## Keys localStorage (đang sử dụng)
