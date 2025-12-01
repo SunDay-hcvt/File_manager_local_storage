@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoxTSun</title>
+    <!-- Links -->
+    <link rel="icon" type="image/svg+xml" href="img/sun.svg">
+    <link rel="stylesheet" href="styles/dashboard.css">
+</head>
+<body>
+    <div id="dashboard" class="dashboard">
+        <header class="header">
+            <h1>Quản lý dữ liệu của bạn</h1>
+            <div class="header-actions">
+                <button id="themeToggle" class="theme-toggle">🌙</button>
+                <span id="userName">Xin chào, </span>
+                <span id="userRole"></span>
+                <button id="logoutBtn">Đăng xuất</button>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button id="filesTab" class="nav-tab active">Quản lý File</button>
+            <button id="statsTab" class="nav-tab">Thống kê</button>
+            <button id="sharedTab" class="nav-tab">Chia sẻ</button>
+            <button id="usersTab" class="nav-tab hidden">Người dùng</button>
+        </nav>
+
+        <div id="filesContent" class="tab-content">
+            <div class="main-content">
+                <div class="sidebar">
+                    <button id="createFolderBtn" class="action-btn">Tạo thư mục</button>
+                    <button id="createFileBtn" class="action-btn">Tạo file</button>
+                    <button id="uploadFileBtn" class="action-btn">Upload file</button>
+                    <input type="file" id="fileInput" multiple style="display: none;">
+                    
+                    <div class="search-section">
+                        <h3>Tìm kiếm & Lọc</h3>
+                        <input type="text" id="searchInput" placeholder="Tìm kiếm file...">
+                        <select id="typeFilter">
+                            <option value="">Tất cả loại</option>
+                            <option value="folder">Thư mục</option>
+                            <option value="file">File</option>
+                            <option value="image">Hình ảnh</option>
+                            <option value="video">Video</option>
+                            <option value="audio">Âm thanh</option>
+                        </select>
+                        <button id="clearFilters" class="btn-secondary">Xóa bộ lọc</button>
+                    </div>
+                </div>
+
+                <div class="file-area">
+                    <div class="breadcrumb">
+                        <span id="currentPath">/ Root</span>
+                    </div>
+                    <div id="fileList" class="file-list">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsContent" class="tab-content hidden">
+            <div class="stats-container">
+                <h1>Thống kê hệ thống</h1><br>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"></div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="totalFolders">0</div>
+                            <div class="stat-label">Thư mục</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"></div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="totalFiles">0</div>
+                            <div class="stat-label">File</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"></div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="totalSize">0 B</div>
+                            <div class="stat-label">Dung lượng</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"></div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="totalShared">0</div>
+                            <div class="stat-label">Đã chia sẻ</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="activity-section">
+                    <h3>Lịch sử hoạt động</h3>
+                    <div id="activityList" class="activity-list">
+                        <!-- Activity items will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sharedContent" class="tab-content hidden">
+            <div class="shared-container">
+                <h1>Quản lý chia sẻ</h1><br>
+                
+                <div class="shared-section">
+                    <h3>File của tôi đã chia sẻ</h3>
+                    <div id="mySharedFiles" class="shared-files-list">
+                        <!-- My shared files will be rendered here -->
+                    </div>
+                </div>
+                
+                <div class="shared-section">
+                    <h3>File được chia sẻ với tôi</h3>
+                    <div id="sharedWithMe" class="shared-files-list">
+                        <!-- Files shared with me will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="usersContent" class="tab-content hidden">
+            <div class="users-container">
+                <h1>Quản lý người dùng</h1><br>
+                <button id="createUserBtn" class="btn-primary">Tạo người dùng mới</button>
+                <div id="usersList" class="users-list">
+                    <!-- Users will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="createDialog" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="dialogTitle">Tạo mới</h3>
+            <input type="text" id="itemName" placeholder="Nhập tên...">
+            <div class="modal-actions">
+                <button id="confirmCreate">Tạo</button>
+                <button id="cancelCreate">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="shareDialog" class="modal hidden">
+        <div class="modal-content">
+            <h3>Chia sẻ file</h3>
+            <p>File: <strong id="shareFileName"></strong></p>
+            
+            <div class="permission-section">
+                <label>Quyền truy cập:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="permission" value="view" checked>Chỉ xem</label>
+                    <label><input type="radio" name="permission" value="edit">Chỉnh sửa</label>
+                </div>
+            </div>
+            
+            <div class="share-link-section">
+                <label>Link chia sẻ:</label>
+                <input type="text" id="shareLink" readonly>
+                <button id="copyLink" class="btn-secondary">Copy</button>
+            </div>
+            
+            <div class="modal-actions">
+                <button id="confirmShare">Chia sẻ</button>
+                <button id="cancelShare">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewDialog" class="modal hidden">
+      <div class="modal-content" id="viewDialogContent">
+        <!-- Nội dung file sẽ được render ở đây -->
+        <button id="closeViewDialog" class="btn-secondary">Đóng</button>
+      </div>
+    </div>
+
+    <div id="contextMenu" class="context-menu hidden">
+        <div id="viewItem" class="context-item">Xem</div>
+        <div id="renameItem" class="context-item">Đổi tên</div>
+        <div id="shareItem" class="context-item">Chia sẻ</div>
+        <div id="downloadItem" class="context-item">Tải xuống</div>
+        <div id="deleteItem" class="context-item">Xóa</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/fileManager.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/mammoth.browser.min.js"></script>
+</body>
+</html>
