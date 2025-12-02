@@ -562,6 +562,25 @@ function openSharedFile(sharedFile) {
     html += `<img src="${file.content}" alt="${file.name}" style="max-width:100%;max-height:400px;">`;
   } else if (file.name.endsWith(".pdf")) {
     html += `<iframe src="${file.content}" style="width:100%;height:500px;" frameborder="0"></iframe>`;
+  } else if (file.name.endsWith(".docx")) {
+    html += `<div id="docxContent" style="max-width:100%;max-height:400px;overflow:auto;border:1px solid #ccc;padding:10px;"></div>`;
+    setTimeout(() => {
+      const arrayBuffer = dataURLtoBlob(file.content).arrayBuffer();
+      arrayBuffer.then((buffer) => {
+        mammoth.convertToHtml({ arrayBuffer: buffer })
+          .then((result) => {
+            document.getElementById("docxContent").innerHTML = result.value;
+          })
+          .catch((err) => {
+            document.getElementById("docxContent").innerHTML = `<p>Lỗi khi hiển thị file DOCX.</p>`;
+            console.error(err);
+          });
+      });
+    }, 100);
+  } else if (file.name.endsWith(".mp3") || file.name.endsWith(".wav") || file.name.endsWith(".ogg") || file.name.endsWith(".m4a") || file.name.endsWith(".flac")) {
+    html += `<audio controls><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ audio.</audio>`;
+  } else if (file.name.endsWith(".mp4") || file.name.endsWith(".webm") || file.name.endsWith(".avi") || file.name.endsWith(".mov") || file.name.endsWith(".wmv") || file.name.endsWith(".flv")) {
+    html += `<video controls style="max-width:100%;max-height:400px;"><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ video.</video>`;
   } else {
     html += `<p>Không hỗ trợ xem trực tiếp loại file này.</p>`;
   }

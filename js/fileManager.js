@@ -790,6 +790,10 @@ function handleView() {
           });
       });
     }, 200);
+  } else if (isVideoFile(fileName)) {
+    html += `<video controls style="max-width:100%;max-height:400px;"><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ video.</video>`;
+  } else if (isAudioFile(fileName)) {
+    html += `<audio controls style="width:100%;"><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ audio.</audio>`;
   } else {
     html += `<p>Không hỗ trợ xem trực tiếp loại file này.</p>`;
   }
