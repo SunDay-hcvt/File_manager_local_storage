@@ -43,7 +43,12 @@ function addActivity(e) {
   activities.push({
     action: e,
     timestamp: (new Date).toISOString()
-  }), localStorage.setItem(`activities_${currentUser.username}`, JSON.stringify(activities))
+  }); 
+  const MAX_ACTIVITIES = 36;
+  if (activities.length > MAX_ACTIVITIES) {
+    activities.splice(0, activities.length - MAX_ACTIVITIES);
+  }
+  localStorage.setItem(`activities_${currentUser.username}`, JSON.stringify(activities))
 }
 window.auth = {
   currentUser: () => currentUser,

@@ -85,6 +85,11 @@ button:disabled {
 }
 
 /* Modal button styles */
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+}
+
 .modal-actions button {
   flex: 1;
   margin: 0;
@@ -123,12 +128,12 @@ button:disabled {
 .btn-primary {
   background: var(--accent);
   color: white;
-  border: none;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
+  padding: 0.5rem;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: 500;
-  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  width: 25vw;
+  margin: 5px 0;
 }
 
 .btn-primary:hover {
@@ -639,15 +644,14 @@ button:disabled {
 
 .permission-section label,
 .share-link-section label {
-  display: block;
   margin-bottom: 0.5rem;
   color: var(--text-secondary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .radio-group {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.5rem;
 }
 
@@ -667,6 +671,11 @@ button:disabled {
 
 .share-link-section input {
   margin-bottom: 0.5rem;
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
 }
 
 /* Responsive Improvements */

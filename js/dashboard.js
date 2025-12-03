@@ -190,7 +190,7 @@ function loadTheme() {
   document.body.className = theme;
   const themeToggle = document.getElementById("themeToggle");
   if (themeToggle) {
-    themeToggle.textContent = theme === "dark" ? "🌙" : "☀️";
+    themeToggle.innerHTML = theme === "dark" ? "<i class='fa-solid fa-moon'></i>" : "<i class='fa-solid fa-sun'></i>";
   }
 }
 
@@ -201,7 +201,7 @@ function toggleTheme() {
   localStorage.setItem("theme", newTheme);
   const themeToggle = document.getElementById("themeToggle");
   if (themeToggle) {
-    themeToggle.textContent = newTheme === "dark" ? "🌙" : "☀️";
+    themeToggle.innerHTML = newTheme === "dark" ? "<i class='fa-solid fa-moon'></i>" : "<i class='fa-solid fa-sun'></i>";
   }
   window.auth.addActivity(`Chuyển sang chế độ ${newTheme === "dark" ? "tối" : "sáng"}`);
 }
@@ -334,14 +334,13 @@ function handleShare() {
 
   window.auth.addActivity(`Chia sẻ file: ${fileName} (${permission})`);
   hideShareDialog();
-  alert("Chia sẻ thành công! Link đã được copy.");
+  alert("Chia sẻ thành công!");
 }
 
 function handleCopyLink() {
   const shareLink = document.getElementById("shareLink");
   if (shareLink) {
     shareLink.select();
-    document.execCommand("copy");
     alert("Đã copy link!");
   }
 }
@@ -371,7 +370,7 @@ function renderMySharedFiles() {
     div.className = "shared-file-item";
     div.innerHTML = `
       <div class="shared-file-info">
-        <div class="shared-file-name">📄 ${file.name}</div>
+        <div class="shared-file-name">${file.name}</div>
         <div class="shared-file-details">
           Quyền: ${file.permission === "view" ? "Xem" : "Chỉnh sửa"} • 
           Chia sẻ: ${formatDate(file.sharedAt)}
@@ -407,7 +406,7 @@ function renderSharedWithMe() {
     div.className = "shared-file-item";
     div.innerHTML = `
       <div class="shared-file-info">
-        <div class="shared-file-name">📄 ${file.name}</div>
+        <div class="shared-file-name">${file.name}</div>
         <div class="shared-file-details">
           Từ: ${file.sharedBy} • 
           Quyền: ${file.permission === "view" ? "Xem" : "Chỉnh sửa"} • 
@@ -534,6 +533,21 @@ window.removeShare = (shareId) => {
   window.auth.addActivity("Xóa chia sẻ file");
 };
 
+function isImageFile(filename) {
+  const imageExts = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".jfif", ".svg"];
+  return imageExts.some((ext) => filename.toLowerCase().endsWith(ext));
+}
+
+function isVideoFile(filename) {
+  const videoExts = [".mp4", ".avi", ".mov", ".wmv", ".flv", ".webm"];
+  return videoExts.some((ext) => filename.toLowerCase().endsWith(ext));
+}
+
+function isAudioFile(filename) {
+  const audioExts = [".mp3", ".wav", ".ogg", ".m4a", ".flac"];
+  return audioExts.some((ext) => filename.toLowerCase().endsWith(ext));
+}
+
 
 function openSharedFile(sharedFile) {
   // Lấy fileSystem của người chia sẻ
@@ -558,7 +572,7 @@ function openSharedFile(sharedFile) {
   if (!viewDialog || !viewDialogContent) return;
 
   let html = `<h3>Xem file: ${file.name}</h3>`;
-  if (file.name.match(/\.(jpg|jpeg|png|gif|bmp|webp|svg|jfif)$/i)) {
+  if (isImageFile(file.name)) {
     html += `<img src="${file.content}" alt="${file.name}" style="max-width:100%;max-height:400px;">`;
   } else if (file.name.endsWith(".pdf")) {
     html += `<iframe src="${file.content}" style="width:100%;height:500px;" frameborder="0"></iframe>`;
@@ -577,22 +591,21 @@ function openSharedFile(sharedFile) {
           });
       });
     }, 100);
-  } else if (file.name.endsWith(".mp3") || file.name.endsWith(".wav") || file.name.endsWith(".ogg") || file.name.endsWith(".m4a") || file.name.endsWith(".flac")) {
+  } else if (isAudioFile(file.name)) {
     html += `<audio controls><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ audio.</audio>`;
-  } else if (file.name.endsWith(".mp4") || file.name.endsWith(".webm") || file.name.endsWith(".avi") || file.name.endsWith(".mov") || file.name.endsWith(".wmv") || file.name.endsWith(".flv")) {
+  } else if (isVideoFile(file.name)) {
     html += `<video controls style="max-width:100%;max-height:400px;"><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ video.</video>`;
   } else {
     html += `<p>Không hỗ trợ xem trực tiếp loại file này.</p>`;
   }
 
   // Nếu có quyền tải về
-  html += `<button id="downloadSharedFile" class="btn-primary">Tải về</button>`;
-  html += `<button id="closeViewDialog" class="btn-secondary">Đóng</button>`;
-
-  // Nếu quyền là "edit", thêm nút Xóa
-  if (sharedFile.permission === "edit") {
-    html += `<button id="deleteSharedFile" class="btn-secondary">Xóa</button>`;
-  }
+  // Căn giữa 3 cái nút này
+  html += `<div style="display:flex;justify-content:center;margin-top:20px;">`;
+  html += `<button id="downloadSharedFile" class="btn-primary" style="margin:5px 10px;">Tải về</button>`;
+  html += `<button id="closeViewDialog" class="btn-primary" style="margin:5px 10px;">Đóng</button>`;
+  html += `<button id="deleteSharedFile" class="btn-primary" style="margin:5px 10px;">Xóa</button>`;
+  html += `</div>`;
 
   viewDialogContent.innerHTML = html; // Gán 1 lần duy nhất
   viewDialog.classList.remove("hidden");
@@ -607,13 +620,10 @@ function openSharedFile(sharedFile) {
     document.body.removeChild(link);
   };
 
-  // Nếu quyền là "edit", gán sự kiện cho nút Xóa
-  if (sharedFile.permission === "edit") {
-    document.getElementById("deleteSharedFile").onclick = () => {
+  document.getElementById("deleteSharedFile").onclick = () => {
       removeShare(sharedFile.shareId);
       viewDialog.classList.add("hidden");
     };
-  }
 }
 
 // Utility functions

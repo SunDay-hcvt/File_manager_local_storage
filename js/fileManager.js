@@ -61,7 +61,7 @@ function renderFileList() {
 
   // Add back button if not in root
   if (currentPath.length > 0) {
-    const backItem = createFileElement("..", "folder", true);
+    const backItem = createFileElement("Quay lại", "folder", true);
     fileList.appendChild(backItem);
   }
 
@@ -105,7 +105,6 @@ function renderFileList() {
     const noResults = document.createElement("div");
     noResults.className = "file-item";
     noResults.innerHTML = `
-      <div class="icon">🔍</div>
       <div class="name">Không tìm thấy kết quả nào</div>
     `;
     fileList.appendChild(noResults);
@@ -133,16 +132,16 @@ function createFileElement(name, type, isBack = false, item = null) {
   icon.className = "icon";
 
   if (isBack) {
-    icon.textContent = "⬅️";
+    icon.innerHTML = "<i class='fa-solid fa-backward'></i>";
   } else if (type === "folder") {
-    icon.textContent = "📁";
+    icon.innerHTML = "<i class='fa-solid fa-folder'></i>";
   } else {
     // Determine file icon based on extension
     const fileName = item?.name || name;
-    if (isImageFile(fileName)) icon.textContent = "🖼️";
-    else if (isVideoFile(fileName)) icon.textContent = "🎥";
-    else if (isAudioFile(fileName)) icon.textContent = "🎵";
-    else icon.textContent = "📄";
+    if (isImageFile(fileName)) icon.innerHTML = "<i class='fa-solid fa-image'></i>";
+    else if (isVideoFile(fileName)) icon.innerHTML = "<i class='fa-solid fa-video'></i>";
+    else if (isAudioFile(fileName)) icon.innerHTML = "<i class='fa-solid fa-music'></i>";
+    else icon.innerHTML = "<i class='fa-solid fa-file'></i>";
   }
 
   const nameDiv = document.createElement("div");
@@ -772,11 +771,11 @@ function handleView() {
   let html = `<h3>Xem file: ${fileName}</h3>`;
 
   if (isImageFile(fileName)) {
-    html += `<img src="${file.content}" alt="${fileName}" style="max-width:100%;max-height:400px;">`;
+    html += `<img src="${file.content}" alt="${fileName}" style="max-width:100%;max-height:600px;">`;
   } else if (fileName.endsWith(".pdf")) {
-    html += `<iframe src="${file.content}" style="width:100%;height:500px;" frameborder="0"></iframe>`;
+    html += `<iframe src="${file.content}" style="width:100%;height:1000px;" frameborder="0"></iframe>`;
   } else if (fileName.endsWith(".docx")) {
-    html += `<div id="docxContent" style="max-width:100%;max-height:400px;overflow:auto;border:1px solid #ccc;padding:10px;"></div>`;
+    html += `<div id="docxContent" style="max-width:100%;max-height:600px;overflow:auto;border:1px solid #ccc;padding:10px;"></div>`;
     setTimeout(() => {
       const arrayBuffer = dataURLtoBlob(file.content).arrayBuffer();
       arrayBuffer.then((buffer) => {
@@ -791,7 +790,7 @@ function handleView() {
       });
     }, 200);
   } else if (isVideoFile(fileName)) {
-    html += `<video controls style="max-width:100%;max-height:400px;"><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ video.</video>`;
+    html += `<video controls style="max-width:100%;max-height:600px;"><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ video.</video>`;
   } else if (isAudioFile(fileName)) {
     html += `<audio controls style="width:100%;"><source src="${file.content}">Trình duyệt của bạn không hỗ trợ thẻ audio.</audio>`;
   } else {

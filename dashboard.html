@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,15 @@
     <!-- Links -->
     <link rel="icon" type="image/svg+xml" href="img/sun.svg">
     <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body>
+
+<body class="light">
     <div id="dashboard" class="dashboard">
         <header class="header">
             <h1>Quản lý dữ liệu của bạn</h1>
             <div class="header-actions">
-                <button id="themeToggle" class="theme-toggle">🌙</button>
+                <button id="themeToggle" class="theme-toggle"></button>
                 <span id="userName">Xin chào, </span>
                 <span id="userRole"></span>
                 <button id="logoutBtn">Đăng xuất</button>
@@ -34,7 +37,7 @@
                     <button id="createFileBtn" class="action-btn">Tạo file</button>
                     <button id="uploadFileBtn" class="action-btn">Upload file</button>
                     <input type="file" id="fileInput" multiple style="display: none;">
-                    
+
                     <div class="search-section">
                         <h3>Tìm kiếm & Lọc</h3>
                         <input type="text" id="searchInput" placeholder="Tìm kiếm file...">
@@ -93,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="activity-section">
                     <h3>Lịch sử hoạt động</h3>
                     <div id="activityList" class="activity-list">
@@ -106,14 +109,14 @@
         <div id="sharedContent" class="tab-content hidden">
             <div class="shared-container">
                 <h1>Quản lý chia sẻ</h1><br>
-                
+
                 <div class="shared-section">
                     <h3>File của tôi đã chia sẻ</h3>
                     <div id="mySharedFiles" class="shared-files-list">
                         <!-- My shared files will be rendered here -->
                     </div>
                 </div>
-                
+
                 <div class="shared-section">
                     <h3>File được chia sẻ với tôi</h3>
                     <div id="sharedWithMe" class="shared-files-list">
@@ -150,7 +153,7 @@
         <div class="modal-content">
             <h3>Chia sẻ file</h3>
             <p>File: <strong id="shareFileName"></strong></p>
-            
+
             <div class="permission-section">
                 <label>Quyền truy cập:</label>
                 <div class="radio-group">
@@ -158,13 +161,12 @@
                     <label><input type="radio" name="permission" value="edit">Chỉnh sửa</label>
                 </div>
             </div>
-            
+
             <div class="share-link-section">
                 <label>Link chia sẻ:</label>
                 <input type="text" id="shareLink" readonly>
-                <button id="copyLink" class="btn-secondary">Copy</button>
             </div>
-            
+
             <div class="modal-actions">
                 <button id="confirmShare">Chia sẻ</button>
                 <button id="cancelShare">Hủy</button>
@@ -173,10 +175,10 @@
     </div>
 
     <div id="viewDialog" class="modal hidden">
-      <div class="modal-content" id="viewDialogContent">
-        <!-- Nội dung file sẽ được render ở đây -->
-        <button id="closeViewDialog" class="btn-secondary">Đóng</button>
-      </div>
+        <div class="modal-content" id="viewDialogContent">
+            <!-- Nội dung file sẽ được render ở đây -->
+            <button id="closeViewDialog" class="btn-primary">Đóng</button>
+        </div>
     </div>
 
     <div id="contextMenu" class="context-menu hidden">
@@ -187,10 +189,10 @@
         <div id="deleteItem" class="context-item">Xóa</div>
     </div>
 
-    <!-- Scripts -->
     <script src="js/auth.js"></script>
     <script src="js/fileManager.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/mammoth.browser.min.js"></script>
 </body>
+
 </html>

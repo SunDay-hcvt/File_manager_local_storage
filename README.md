@@ -45,7 +45,7 @@ Không cần cài đặt, chỉ cần trình duyệt hiện đại (Chrome/Edge/
 ## Những điểm lưu ý / vận hành
 - File upload lưu content dưới dạng dataURL (sử dụng FileReader). Tệp lớn sẽ nhanh chóng làm đầy localStorage.
 - Khi đổi tên file, module đã cập nhật cả shared metadata (sharedFiles_{owner} và globalSharedFiles) để người được chia sẻ vẫn thấy file với tên mới.
-- Double-click mở file viewer (image/pdf/docx). Viewer responsive, chiều cao modal được tối ưu để hiển thị lớn hơn nhưng vẫn phù hợp trên mobile.
+- Double-click mở file viewer (image/pdf/docx/mp3/mp4). Viewer responsive, chiều cao modal được tối ưu để hiển thị lớn hơn nhưng vẫn phù hợp trên mobile.
 - Admin không thể tự hạ quyền hoặc xóa chính mình (cả UI và server-side client check).
 
 ## API nội bộ (window namespace)
@@ -59,7 +59,6 @@ Không cần cài đặt, chỉ cần trình duyệt hiện đại (Chrome/Edge/
 - localStorage có hạn — cân nhắc lưu file lớn lên server hoặc IndexedDB.
 - Thêm xác thực mạnh hơn (hash password) nếu dùng ngoài mục học tập.
 - Khi share theo đường dẫn, có thể sinh token ngắn hạn và mapping vào metadata server để an toàn.
-- Hiện tại share lưu path/ tên file — khi owner di chuyển (không đổi tên) có thể làm link hỏng; có thể lưu một ID nội bộ cho file để tham chiếu bền hơn.
 
 ## Troubleshooting nhanh
 - Không thấy file sau khi upload: kiểm tra console, kiểm tra key `fileSystem_{username}` có tồn tại.
