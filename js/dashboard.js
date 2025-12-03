@@ -50,6 +50,12 @@ function setupEventListeners() {
     logoutBtn.addEventListener("click", window.auth.handleLogout);
   }
 
+  // Change own password
+  const changePasswordBtn = document.getElementById("changePasswordBtn");
+  if (changePasswordBtn) {
+    changePasswordBtn.addEventListener("click", handleChangeOwnPassword);
+  }
+
   // Navigation tabs
   const filesTab = document.getElementById("filesTab");
   const statsTab = document.getElementById("statsTab");
@@ -451,6 +457,7 @@ function renderUsersList() {
       </div>
       <div class="user-actions">
         ${username !== currentUser.username ? `<button onclick="toggleUserRole('${username}')" class="btn-primary">${user.role === "admin" ? "Hạ quyền" : "Nâng quyền"}</button>` : ""}
+        ${username !== currentUser.username ? `<button onclick="changeUserPassword('${username}')" class="btn-primary">Đổi mật khẩu</button>` : ""}
         ${username !== currentUser.username ? `<button onclick="deleteUser('${username}')" class="btn-secondary">Xóa</button>` : ""}
       </div>
     `;
@@ -481,6 +488,101 @@ function handleCreateUser() {
   renderUsersList();
   window.auth.addActivity(`Tạo người dùng: ${username}`);
 }
+
+// Change password functions
+function handleChangeOwnPassword() {
+  const currentUser = window.auth.currentUser();
+  if (!currentUser) return;
+
+  const users = JSON.parse(localStorage.getItem("users") || "{}");
+  const storedUser = users[currentUser.username];
+  if (!storedUser) {
+    alert("Tài khoản không tồn tại!");
+    return;
+  }
+
+  // Nếu là admin, cho phép chọn đổi mật khẩu cho chính mình hoặc người khác trong tab Người dùng
+  // Ở đây nút trên header chỉ dùng để đổi mật khẩu của chính mình
+  const oldPassword = prompt("Nhập mật khẩu hiện tại:");
+  if (oldPassword === null) return;
+
+  if (oldPassword !== storedUser.password) {
+    alert("Mật khẩu hiện tại không đúng!");
+    return;
+  }
+
+  const newPassword = prompt("Nhập mật khẩu mới:");
+  if (newPassword === null || !newPassword.trim()) {
+    alert("Mật khẩu mới không được để trống!");
+    return;
+  }
+
+  const confirmPassword = prompt("Nhập lại mật khẩu mới:");
+  if (confirmPassword === null) return;
+
+  if (newPassword !== confirmPassword) {
+    alert("Mật khẩu xác nhận không khớp!");
+    return;
+  }
+
+  storedUser.password = newPassword;
+  users[currentUser.username] = storedUser;
+  localStorage.setItem("users", JSON.stringify(users));
+
+  // Cập nhật currentUser trong localStorage
+  const updatedCurrentUser = {
+    ...currentUser,
+    password: newPassword,
+  };
+  localStorage.setItem("currentUser", JSON.stringify(updatedCurrentUser));
+
+  window.auth.addActivity("Đổi mật khẩu tài khoản của bạn");
+  alert("Đổi mật khẩu thành công!");
+}
+
+window.changeUserPassword = (username) => {
+  const currentUser = window.auth.currentUser();
+  if (!currentUser || currentUser.role !== "admin") return;
+
+  const users = JSON.parse(localStorage.getItem("users") || "{}");
+  const targetUser = users[username];
+
+  if (!targetUser) {
+    alert("Người dùng không tồn tại!");
+    return;
+  }
+
+  const newPassword = prompt(`Nhập mật khẩu mới cho người dùng "${username}":`);
+  if (newPassword === null || !newPassword.trim()) {
+    alert("Mật khẩu mới không được để trống!");
+    return;
+  }
+
+  const confirmPassword = prompt("Nhập lại mật khẩu mới:");
+  if (confirmPassword === null) return;
+
+  if (newPassword !== confirmPassword) {
+    alert("Mật khẩu xác nhận không khớp!");
+    return;
+  }
+
+  targetUser.password = newPassword;
+  users[username] = targetUser;
+  localStorage.setItem("users", JSON.stringify(users));
+
+  // Nếu admin đổi mật khẩu cho chính mình, cập nhật luôn currentUser
+  if (username === currentUser.username) {
+    const updatedCurrentUser = {
+      ...currentUser,
+      password: newPassword,
+    };
+    localStorage.setItem("currentUser", JSON.stringify(updatedCurrentUser));
+  }
+
+  renderUsersList();
+  window.auth.addActivity(`Đổi mật khẩu cho người dùng: ${username}`);
+  alert("Đổi mật khẩu thành công!");
+};
 
 // Global functions for user management
 window.toggleUserRole = (username) => {
