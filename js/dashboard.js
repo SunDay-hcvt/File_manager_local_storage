@@ -1,12 +1,11 @@
-// Dashboard page specific JavaScript
 document.addEventListener("DOMContentLoaded", () => {
-  // Check authentication
+  // Kiểm tra xác thực
   if (!window.auth.checkAuth()) {
     window.location.href = "index.html";
     return;
   }
 
-  // Initialize dashboard
+  // Khởi tạo dashboard
   initializeDashboard();
   setupEventListeners();
 });
@@ -14,12 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeDashboard() {
   const currentUser = window.auth.currentUser();
   
-  // Update user info in header
+  // Cập nhật thông tin người dùng trong phần đầu trang
   const userName = document.getElementById("userName");
   const userRole = document.getElementById("userRole");
   const usersTab = document.getElementById("usersTab");
   
-  // Sửa lại để hiển thị username thay vì email
   if (userName) userName.textContent += currentUser.username + "!";
   if (userRole) userRole.textContent = currentUser.role === "admin" ? "Admin" : "User";
   
@@ -69,12 +67,10 @@ function setupEventListeners() {
 
   // File management
   const createFolderBtn = document.getElementById("createFolderBtn");
-  const createFileBtn = document.getElementById("createFileBtn");
   const uploadFileBtn = document.getElementById("uploadFileBtn");
   const fileInput = document.getElementById("fileInput");
 
   if (createFolderBtn) createFolderBtn.addEventListener("click", () => window.fileManager.showCreateDialog(true));
-  if (createFileBtn) createFileBtn.addEventListener("click", () => window.fileManager.showCreateDialog(false));
   if (uploadFileBtn) uploadFileBtn.addEventListener("click", () => fileInput.click());
   if (fileInput) fileInput.addEventListener("change", window.fileManager.handleFileUpload);
 
@@ -701,15 +697,13 @@ function openSharedFile(sharedFile) {
     html += `<p>Không hỗ trợ xem trực tiếp loại file này.</p>`;
   }
 
-  // Nếu có quyền tải về
-  // Căn giữa 3 cái nút này
   html += `<div style="display:flex;justify-content:center;margin-top:20px;">`;
   html += `<button id="downloadSharedFile" class="btn-primary" style="margin:5px 10px;">Tải về</button>`;
   html += `<button id="closeViewDialog" class="btn-primary" style="margin:5px 10px;">Đóng</button>`;
   html += `<button id="deleteSharedFile" class="btn-primary" style="margin:5px 10px;">Xóa</button>`;
   html += `</div>`;
 
-  viewDialogContent.innerHTML = html; // Gán 1 lần duy nhất
+  viewDialogContent.innerHTML = html;
   viewDialog.classList.remove("hidden");
 
   document.getElementById("closeViewDialog").onclick = () => viewDialog.classList.add("hidden");

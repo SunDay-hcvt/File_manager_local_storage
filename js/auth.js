@@ -37,13 +37,16 @@ function checkAuth() {
   return !!e && (currentUser = JSON.parse(e), !0)
 }
 
+// Hàm thêm hoạt động người dùng
 function addActivity(e) {
   if (!currentUser) return;
   const activities = JSON.parse(localStorage.getItem(`activities_${currentUser.username}`) || "[]");
   activities.push({
     action: e,
     timestamp: (new Date).toISOString()
-  }); 
+  });
+
+  // Giới hạn số lượng hoạt động lưu trữ
   const MAX_ACTIVITIES = 36;
   if (activities.length > MAX_ACTIVITIES) {
     activities.splice(0, activities.length - MAX_ACTIVITIES);

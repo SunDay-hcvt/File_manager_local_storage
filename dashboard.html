@@ -35,7 +35,6 @@
             <div class="main-content">
                 <div class="sidebar">
                     <button id="createFolderBtn" class="action-btn">Tạo thư mục</button>
-                    <button id="createFileBtn" class="action-btn">Tạo file</button>
                     <button id="uploadFileBtn" class="action-btn">Upload file</button>
                     <input type="file" id="fileInput" multiple style="display: none;">
 
@@ -100,9 +99,7 @@
 
                 <div class="activity-section">
                     <h3>Lịch sử hoạt động</h3>
-                    <div id="activityList" class="activity-list">
-                        <!-- Activity items will be rendered here -->
-                    </div>
+                    <div id="activityList" class="activity-list"></div>
                 </div>
             </div>
         </div>
@@ -113,16 +110,12 @@
 
                 <div class="shared-section">
                     <h3>File của tôi đã chia sẻ</h3>
-                    <div id="mySharedFiles" class="shared-files-list">
-                        <!-- My shared files will be rendered here -->
-                    </div>
+                    <div id="mySharedFiles" class="shared-files-list"></div>
                 </div>
 
                 <div class="shared-section">
                     <h3>File được chia sẻ với tôi</h3>
-                    <div id="sharedWithMe" class="shared-files-list">
-                        <!-- Files shared with me will be rendered here -->
-                    </div>
+                    <div id="sharedWithMe" class="shared-files-list"></div>
                 </div>
             </div>
         </div>
@@ -130,10 +123,8 @@
         <div id="usersContent" class="tab-content hidden">
             <div class="users-container">
                 <h1>Quản lý người dùng</h1><br>
-                <button id="createUserBtn" class="btn-primary">Tạo người dùng mới</button>
-                <div id="usersList" class="users-list">
-                    <!-- Users will be rendered here -->
-                </div>
+                <button id="createUserBtn" class="btn-primary">Tạo người dùng mới</button><br>
+                <div id="usersList" class="users-list"></div>
             </div>
         </div>
     </div>
@@ -177,7 +168,6 @@
 
     <div id="viewDialog" class="modal hidden">
         <div class="modal-content" id="viewDialogContent">
-            <!-- Nội dung file sẽ được render ở đây -->
             <button id="closeViewDialog" class="btn-primary">Đóng</button>
         </div>
     </div>

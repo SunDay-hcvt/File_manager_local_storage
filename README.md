@@ -1,6 +1,6 @@
 # File Manager
 
-Ứng dụng quản lý file phía client (không cần server), hỗ trợ nhiều người dùng, chia sẻ, kéo-thả, xem file (image, PDF, DOCX) và quản lý quyền.
+Ứng dụng quản lý file phía client (không cần server), hỗ trợ nhiều người dùng, chia sẻ, kéo-thả, xem file (Ảnh, Video, DOCX, PDF) và quản lý quyền.
 
 ## Tính năng chính
 - Đăng ký / đăng nhập (auth.js)

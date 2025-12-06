@@ -1,21 +1,21 @@
-// File Manager module
-let currentPath = [];
-let fileSystem = {};
-let isCreatingFolder = false;
-let currentContextItem = null;
-let searchTerm = "";
-let typeFilter = "";
+let currentPath = []; // Mảng lưu trữ đường dẫn hiện tại
+let fileSystem = {}; // Đối tượng lưu trữ hệ thống file
+let isCreatingFolder = false; // Cờ để xác định đang tạo thư mục hay file
+let currentContextItem = null; // Đối tượng file/thư mục hiện tại trong context menu
+let searchTerm = ""; // Tìm kiếm hiện tại
+let typeFilter = ""; // Bộ lọc loại file hiện tại
 
-// File system functions
+// Tải hệ thống file từ localStorage
 function loadFileSystem() {
-  const currentUser = window.auth.currentUser();
-  if (!currentUser) return;
+  const currentUser = window.auth.currentUser(); 
+  if (!currentUser) return; 
 
   // Sửa key lưu file system sang username
   const key = `fileSystem_${currentUser.username}`;
   fileSystem = JSON.parse(localStorage.getItem(key) || "{}");
 }
 
+// Lưu hệ thống file vào localStorage
 function saveFileSystem() {
   const currentUser = window.auth.currentUser();
   if (!currentUser) return;
@@ -25,6 +25,7 @@ function saveFileSystem() {
   localStorage.setItem(key, JSON.stringify(fileSystem));
 }
 
+// Lấy thư mục hiện tại dựa trên currentPath
 function getCurrentFolder() {
   let current = fileSystem;
   for (const folder of currentPath) {
@@ -46,6 +47,7 @@ function getCurrentFolder() {
   return current;
 }
 
+// Hiển thị danh sách file và thư mục
 function renderFileList() {
   const current = getCurrentFolder();
   const pathText = currentPath.length === 0 ? "/ Root" : "/ " + currentPath.join(" / ");
@@ -59,21 +61,21 @@ function renderFileList() {
 
   fileList.innerHTML = "";
 
-  // Add back button if not in root
+  // Thêm nút quay lại nếu không ở thư mục gốc
   if (currentPath.length > 0) {
     const backItem = createFileElement("Quay lại", "folder", true);
     fileList.appendChild(backItem);
   }
 
-  // Get and filter items
+  // Lấy và lọc các mục
   let items = Object.entries(current);
 
-  // Apply search filter
+  // Áp dụng bộ lọc tìm kiếm
   if (searchTerm) {
     items = items.filter(([name]) => name.toLowerCase().includes(searchTerm.toLowerCase()));
   }
 
-  // Apply type filter
+  // Áp dụng bộ lọc loại
   if (typeFilter) {
     items = items.filter(([, item]) => {
       if (typeFilter === "image") {
@@ -89,7 +91,7 @@ function renderFileList() {
     });
   }
 
-  // Sort: folders first, then files
+  // Sắp xếp: thư mục trước, sau đó là file
   items.sort(([, a], [, b]) => {
     if (a.type === "folder" && b.type !== "folder") return -1;
     if (a.type !== "folder" && b.type === "folder") return 1;
@@ -111,6 +113,7 @@ function renderFileList() {
   }
 }
 
+// Tạo phần tử file/thư mục
 function createFileElement(name, type, isBack = false, item = null) {
   const div = document.createElement("div");
   div.className = "file-item";
@@ -118,7 +121,7 @@ function createFileElement(name, type, isBack = false, item = null) {
   const level = Math.min(currentPath.length, 4);
   div.classList.add(`level-${level}`);
 
-  // Check if item is shared
+  // Kiểm tra nếu mục đang được chia sẻ
   const currentUser = window.auth.currentUser();
   if (currentUser) {
     const sharedFiles = JSON.parse(localStorage.getItem(`sharedFiles_${currentUser.email}`) || "[]");
@@ -136,7 +139,6 @@ function createFileElement(name, type, isBack = false, item = null) {
   } else if (type === "folder") {
     icon.innerHTML = "<i class='fa-solid fa-folder'></i>";
   } else {
-    // Determine file icon based on extension
     const fileName = item?.name || name;
     if (isImageFile(fileName)) icon.innerHTML = "<i class='fa-solid fa-image'></i>";
     else if (isVideoFile(fileName)) icon.innerHTML = "<i class='fa-solid fa-video'></i>";
@@ -151,7 +153,7 @@ function createFileElement(name, type, isBack = false, item = null) {
   div.appendChild(icon);
   div.appendChild(nameDiv);
 
-  // Add file details
+  // Thông tin bổ sung cho file (kích thước, ngày tạo)
   if (!isBack && item) {
     if (item.size) {
       const sizeDiv = document.createElement("div");
@@ -168,7 +170,7 @@ function createFileElement(name, type, isBack = false, item = null) {
     }
   }
 
-  // Click handler
+  // Xử lý sự kiện click
   div.addEventListener("click", () => {
     if (isBack) {
       currentPath.pop();
@@ -195,13 +197,14 @@ function createFileElement(name, type, isBack = false, item = null) {
     }));
   }
 
-  // Context menu for non-back items
+  // Xử lý sự kiện chuột phải và kéo thả
   if (!isBack) {
     div.addEventListener("contextmenu", (e) => {
       e.preventDefault();
       showContextMenu(e.clientX, e.clientY, name, type, item);
     });
 
+    // Kéo thả
     div.draggable = true;
     div.addEventListener("dragstart", (e) => {
       div.classList.add("dragging");
@@ -215,9 +218,9 @@ function createFileElement(name, type, isBack = false, item = null) {
           sourcePath: [...currentPath],
         }),
       );
-      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.effectAllowed = "move"; // Chỉ cho phép di chuyển
 
-      // Store the dragged item globally for easier access
+      // Lưu thông tin kéo thả vào biến toàn cục
       window.currentDraggedItem = {
         name,
         type,
@@ -228,13 +231,13 @@ function createFileElement(name, type, isBack = false, item = null) {
 
     div.addEventListener("dragend", () => {
       div.classList.remove("dragging");
-      // Clear global variable
+      // Dọn dẹp biến toàn cục
       window.currentDraggedItem = null;
-      // Clear all drag-over classes
+      // Xóa tất cả các lớp drag-over
       clearAllDragOverClasses();
     });
 
-    // Allow drop on folders
+    // Cho phép thả vào thư mục
     if (type === "folder") {
       div.addEventListener("dragover", (e) => {
         e.preventDefault();
@@ -260,7 +263,7 @@ function createFileElement(name, type, isBack = false, item = null) {
   return div;
 }
 
-// Create/Delete functions
+// Tạo/Xóa hộp thoại tạo file/thư mục
 function showCreateDialog(isFolder) {
   isCreatingFolder = isFolder;
   const dialogTitle = document.getElementById("dialogTitle");
@@ -275,6 +278,7 @@ function showCreateDialog(isFolder) {
   }
 }
 
+// Ẩn hộp thoại tạo file/thư mục
 function hideCreateDialog() {
   const createDialog = document.getElementById("createDialog");
   if (createDialog) {
@@ -282,6 +286,7 @@ function hideCreateDialog() {
   }
 }
 
+// Xử lý tạo file/thư mục mới
 function handleCreate() {
   const itemName = document.getElementById("itemName");
   if (!itemName) return;
