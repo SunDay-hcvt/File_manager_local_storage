@@ -34,7 +34,6 @@ body {
   display: none !important;
 }
 
-/* Button Styles */
 button {
   padding: 0.75rem 1rem;
   border: none;
@@ -62,7 +61,6 @@ button:disabled {
   font-size: 0.8rem;
 }
 
-/* Header button styles */
 #logoutBtn {
   background: #dc2626;
   color: white;
@@ -74,7 +72,6 @@ button:disabled {
   background: #b91c1c;
 }
 
-/* Action button styles */
 .action-btn {
   width: 100%;
   margin-bottom: 0.5rem;
@@ -90,7 +87,6 @@ button:disabled {
   border-color: var(--accent);
 }
 
-/* Modal button styles */
 .modal-actions {
   display: flex;
   gap: 1rem;
@@ -112,7 +108,6 @@ button:disabled {
   background: var(--border);
 }
 
-/* Secondary button styles */
 .btn-secondary {
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -130,7 +125,6 @@ button:disabled {
   border-color: var(--accent);
 }
 
-/* Primary button styles */
 .btn-primary {
   background: var(--accent);
   color: white;
@@ -146,7 +140,6 @@ button:disabled {
   background: var(--accent-hover);
 }
 
-/* Shared file and user action buttons */
 .shared-file-actions button,
 .user-actions button {
   padding: 0.5rem 1rem;
@@ -155,7 +148,6 @@ button:disabled {
   margin: 0;
 }
 
-/* Dashboard Styles */
 .dashboard {
   min-height: 100vh;
   display: flex;
@@ -250,7 +242,6 @@ button:disabled {
   opacity: 0.5;
 }
 
-/* Drop zone styles for moving files out of folders */
 .file-area.drag-over {
   border: 2px dashed var(--accent);
   background: rgba(139, 92, 246, 0.05);
@@ -315,7 +306,6 @@ button:disabled {
   background: var(--border);
 }
 
-/* Modal Styles */
 .modal {
   position: fixed;
   top: 0;
@@ -334,9 +324,9 @@ button:disabled {
   padding: 1.5rem;
   border-radius: 12px;
   width: min(1100px, 95%);
-  max-width: 1100px; /* tăng kích thước khung xem trên màn hình lớn */
+  max-width: 1100px;
   max-height: 95vh;
-  overflow: auto; /* cho phép cuộn nếu nội dung cao */
+  overflow: auto;
   box-sizing: border-box;
 }
 
@@ -356,19 +346,17 @@ button:disabled {
   color: var(--text-primary);
 }
 
-/* Make view content use available space and stay responsive */
 #viewDialogContent img,
 #viewDialogContent iframe,
 #viewDialogContent #docxContent {
   width: 100%;
   max-width: 100%;
   height: auto;
-  max-height: calc(98vh - 180px); /* giữ trong khung nhìn */
+  max-height: calc(98vh - 180px);
   object-fit: contain;
   display: block;
 }
 
-/* docx content scroll when large */
 #viewDialogContent #docxContent {
   overflow: auto;
   border-radius: 6px;
@@ -376,23 +364,6 @@ button:disabled {
   background: var(--bg-secondary);
 }
 
-/* Smaller screens: modal full-width with comfortable padding */
-@media (max-width: 600px) {
-  .modal-content {
-    width: 95%;
-    max-width: 95%;
-    padding: 1rem;
-    max-height: 98vh;
-  }
-
-  #viewDialogContent img,
-  #viewDialogContent iframe,
-  #viewDialogContent #docxContent {
-    max-height: calc(90vh - 120px);
-  }
-}
-
-/* Navigation Tabs Styles */
 .nav-tabs {
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border);
@@ -428,7 +399,6 @@ button:disabled {
   flex-direction: column;
 }
 
-/* Search Section Styles */
 .search-section {
   margin-top: 2rem;
   padding-top: 1rem;
@@ -453,8 +423,6 @@ button:disabled {
   font-size: 0.9rem;
 }
 
-
-/* Statistics Styles */
 .stats-container {
   padding: 2rem;
 }
@@ -524,7 +492,6 @@ button:disabled {
   font-size: 0.8rem;
 }
 
-/* Shared Files Styles */
 .shared-container {
   padding: 2rem;
 }
@@ -573,7 +540,6 @@ button:disabled {
 }
 
 
-/* User Management Styles */
 .users-container {
   padding: 2rem;
 }
@@ -612,7 +578,6 @@ button:disabled {
   gap: 0.5rem;
 }
 
-/* Context Menu Styles */
 .context-menu {
   position: fixed;
   background: var(--bg-primary);
@@ -642,7 +607,6 @@ button:disabled {
   border-radius: 0 0 6px 6px;
 }
 
-/* Enhanced Modal Styles for Share Dialog */
 .permission-section,
 .share-link-section {
   margin-bottom: 1rem;
@@ -684,8 +648,70 @@ button:disabled {
   gap: 0.5rem;
 }
 
-/* Responsive Improvements */
-@media (max-width: 768px) {
+@media (max-width: 870px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .main-content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+
+  .file-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .nav-tabs {
+    padding: 0 1rem;
+    overflow-x: auto;
+  }
+
+  .nav-tab {
+    white-space: nowrap;
+    padding: 0.75rem 1rem;
+  }
+
+  .shared-file-item,
+  .user-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .shared-file-actions,
+  .user-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: 95%;
+    padding: 1rem;
+    max-height: 98vh;
+  }
+
+  #viewDialogContent img,
+  #viewDialogContent iframe,
+  #viewDialogContent #docxContent {
+    max-height: calc(90vh - 120px);
+  }
+}
+
+@media (max-width: 570px) {
   .main-content {
     flex-direction: column;
   }
@@ -723,5 +749,18 @@ button:disabled {
   .user-actions {
     width: 100%;
     justify-content: flex-end;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: 95%;
+    padding: 1rem;
+    max-height: 98vh;
+  }
+
+  #viewDialogContent img,
+  #viewDialogContent iframe,
+  #viewDialogContent #docxContent {
+    max-height: calc(90vh - 120px);
   }
 }

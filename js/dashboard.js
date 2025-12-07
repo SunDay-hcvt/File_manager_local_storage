@@ -21,7 +21,7 @@ function initializeDashboard() {
   if (userName) userName.textContent += currentUser.username + "!";
   if (userRole) userRole.textContent = currentUser.role === "admin" ? "Admin" : "User";
   
-  // Show/hide admin features
+  // Hiển thị/ẩn tính năng admin
   if (usersTab) {
     if (currentUser.role === "admin") {
       usersTab.classList.remove("hidden");
@@ -30,31 +30,31 @@ function initializeDashboard() {
     }
   }
 
-  // Load file system and render
+  // Tải hệ thống file và render
   window.fileManager.loadFileSystem();
   switchTab("files");
 }
 
 function setupEventListeners() {
-  // Theme toggle
+  // Chuyển đổi chủ đề
   const themeToggle = document.getElementById("themeToggle");
   if (themeToggle) {
     themeToggle.addEventListener("click", toggleTheme);
   }
 
-  // Logout
+  // Đăng xuất
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", window.auth.handleLogout);
   }
 
-  // Change own password
+  // Đổi mật khẩu của chính mình
   const changePasswordBtn = document.getElementById("changePasswordBtn");
   if (changePasswordBtn) {
     changePasswordBtn.addEventListener("click", handleChangeOwnPassword);
   }
 
-  // Navigation tabs
+  // Các tab điều hướng
   const filesTab = document.getElementById("filesTab");
   const statsTab = document.getElementById("statsTab");
   const sharedTab = document.getElementById("sharedTab");
@@ -65,7 +65,7 @@ function setupEventListeners() {
   if (sharedTab) sharedTab.addEventListener("click", () => switchTab("shared"));
   if (usersTab) usersTab.addEventListener("click", () => switchTab("users"));
 
-  // File management
+  // Quản lý file
   const createFolderBtn = document.getElementById("createFolderBtn");
   const uploadFileBtn = document.getElementById("uploadFileBtn");
   const fileInput = document.getElementById("fileInput");
@@ -74,7 +74,7 @@ function setupEventListeners() {
   if (uploadFileBtn) uploadFileBtn.addEventListener("click", () => fileInput.click());
   if (fileInput) fileInput.addEventListener("change", window.fileManager.handleFileUpload);
 
-  // Search and filter
+  // Tìm kiếm và lọc
   const searchInput = document.getElementById("searchInput");
   const typeFilterSelect = document.getElementById("typeFilter");
   const clearFiltersBtn = document.getElementById("clearFilters");
@@ -83,7 +83,7 @@ function setupEventListeners() {
   if (typeFilterSelect) typeFilterSelect.addEventListener("change", window.fileManager.handleTypeFilter);
   if (clearFiltersBtn) clearFiltersBtn.addEventListener("click", window.fileManager.clearFilters);
 
-  // Dialogs
+  // Hộp thoại
   const confirmCreate = document.getElementById("confirmCreate");
   const cancelCreate = document.getElementById("cancelCreate");
   const confirmShare = document.getElementById("confirmShare");
@@ -96,7 +96,7 @@ function setupEventListeners() {
   if (cancelShare) cancelShare.addEventListener("click", hideShareDialog);
   if (copyLink) copyLink.addEventListener("click", handleCopyLink);
 
-  // Context menu
+  // Menu ngữ cảnh
   const renameItem = document.getElementById("renameItem");
   const shareItem = document.getElementById("shareItem");
   const downloadItem = document.getElementById("downloadItem");
@@ -109,17 +109,17 @@ function setupEventListeners() {
   if (deleteItem) deleteItem.addEventListener("click", window.fileManager.handleDelete);
   if (viewItem) viewItem.addEventListener("click", window.fileManager.handleView);
 
-  // User management
+  // Quản lý người dùng
   const createUserBtn = document.getElementById("createUserBtn");
   if (createUserBtn) createUserBtn.addEventListener("click", handleCreateUser);
 
-  // Global click to hide context menu
+  // Click toàn cục để ẩn menu ngữ cảnh
   document.addEventListener("click", window.fileManager.hideContextMenu);
 
-  // Global drag end to clear all drag-over classes
+  // Kết thúc kéo toàn cục để xóa tất cả các lớp drag-over
   document.addEventListener("dragend", window.fileManager.clearAllDragOverClasses);
 
-  // Drag and drop
+  // Kéo và thả
   const fileList = document.getElementById("fileList");
   const fileArea = document.querySelector(".file-area");
   const currentPathElement = document.getElementById("currentPath");
@@ -141,13 +141,13 @@ function setupEventListeners() {
     currentPathElement.addEventListener("drop", window.fileManager.handleBreadcrumbDrop);
   }
 
-  // Load theme
+  // Tải chủ đề
   loadTheme();
 }
 
-// Tab switching functionality
+// Chức năng chuyển đổi tab
 function switchTab(tab) {
-  // Update tab buttons
+  // Cập nhật các nút tab
   document.querySelectorAll(".nav-tab").forEach((t) => t.classList.remove("active"));
   document.querySelectorAll(".tab-content").forEach((c) => c.classList.add("hidden"));
 
@@ -186,7 +186,7 @@ function switchTab(tab) {
   }
 }
 
-// Theme functions
+// Chức năng chủ đề
 function loadTheme() {
   const theme = localStorage.getItem("theme") || "light";
   document.body.className = theme;
@@ -208,9 +208,9 @@ function toggleTheme() {
   window.auth.addActivity(`Chuyển sang chế độ ${newTheme === "dark" ? "tối" : "sáng"}`);
 }
 
-// Statistics functions
+// Chức năng thống kê
 function updateStatistics() {
-  // Access fileSystem from the fileManager module
+  // Truy cập fileSystem từ module fileManager
   const stats = calculateStatistics(window.fileManager.fileSystem || {});
 
   const totalFolders = document.getElementById("totalFolders");
@@ -282,7 +282,7 @@ function renderActivityList() {
   }
 }
 
-// Share functions
+// Chức năng chia sẻ
 function showShareDialog(fileName) {
   const shareFileName = document.getElementById("shareFileName");
   const shareLink = document.getElementById("shareLink");
@@ -311,7 +311,7 @@ function handleShare() {
   const currentUser = window.auth.currentUser();
   if (!currentUser) return;
 
-  // Save shared file info
+  // Lưu thông tin file chia sẻ
   const sharedFiles = JSON.parse(localStorage.getItem(`sharedFiles_${currentUser.username}`) || "[]");
   sharedFiles.push({
     name: fileName,
@@ -322,7 +322,7 @@ function handleShare() {
   });
   localStorage.setItem(`sharedFiles_${currentUser.username}`, JSON.stringify(sharedFiles));
 
-  // Save to global shared files
+  // Lưu vào file chia sẻ toàn cục
   const globalShared = JSON.parse(localStorage.getItem("globalSharedFiles") || "[]");
   globalShared.push({
     name: fileName,
@@ -351,7 +351,7 @@ function generateShareId() {
   return Math.random().toString(36).substr(2, 9);
 }
 
-// Shared files functions
+// Chức năng file chia sẻ
 function renderSharedFiles() {
   renderMySharedFiles();
   renderSharedWithMe();
@@ -416,7 +416,7 @@ function renderSharedWithMe() {
         </div>
       </div>
     `;
-    // Thêm sự kiện click để mở file được share
+    // Thêm sự kiện click để mở file được chia sẻ
     div.addEventListener("click", () => {
       openSharedFile(file);
     });
@@ -429,7 +429,7 @@ function renderSharedWithMe() {
   }
 }
 
-// User management functions
+// Chức năng quản lý người dùng
 function renderUsersList() {
   const currentUser = window.auth.currentUser();
   if (currentUser.role !== "admin") return;
@@ -485,7 +485,7 @@ function handleCreateUser() {
   window.auth.addActivity(`Tạo người dùng: ${username}`);
 }
 
-// Change password functions
+// Chức năng đổi mật khẩu
 function handleChangeOwnPassword() {
   const currentUser = window.auth.currentUser();
   if (!currentUser) return;
@@ -580,7 +580,7 @@ window.changeUserPassword = (username) => {
   alert("Đổi mật khẩu thành công!");
 };
 
-// Global functions for user management
+// Các hàm toàn cục để quản lý người dùng
 window.toggleUserRole = (username) => {
   const currentUser = window.auth.currentUser();
   if (currentUser.role !== "admin") return;
@@ -607,7 +607,7 @@ window.deleteUser = (username) => {
   }
 };
 
-// Global functions for shared files
+// Các hàm toàn cục để quản lý file chia sẻ
 window.copyShareLink = (shareId) => {
   const link = `${window.location.origin}?share=${shareId}`;
   navigator.clipboard.writeText(link).then(() => {
@@ -651,7 +651,7 @@ function openSharedFile(sharedFile) {
   // Lấy fileSystem của người chia sẻ
   const ownerFileSystem = JSON.parse(localStorage.getItem(`fileSystem_${sharedFile.sharedBy}`) || "{}");
   let file = ownerFileSystem;
-  // Duyệt theo path nếu có (nếu bạn lưu path khi share)
+  // Duyệt theo path nếu có (nếu bạn lưu path khi chia sẻ)
   if (sharedFile.path && sharedFile.path.length) {
     for (const folder of sharedFile.path) {
       file = file[folder]?.children || {};
@@ -664,7 +664,7 @@ function openSharedFile(sharedFile) {
     return;
   }
 
-  // Hiển thị dialog xem file (tùy loại file)
+  // Hiển thị dialog xem file (tùy theo loại file)
   const viewDialog = document.getElementById("viewDialog");
   const viewDialogContent = document.getElementById("viewDialogContent");
   if (!viewDialog || !viewDialogContent) return;
@@ -722,7 +722,7 @@ function openSharedFile(sharedFile) {
     };
 }
 
-// Utility functions
+// Hàm tiện ích
 function formatFileSize(bytes) {
   if (bytes === 0) return "0 B";
   const k = 1024;

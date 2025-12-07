@@ -319,7 +319,7 @@ function handleCreate() {
 function handleFileUpload(e) {
   const files = Array.from(e.target.files);
   handleFileUploadFromFiles(files);
-  e.target.value = ""; // Reset input
+  e.target.value = ""; // Đặt lại input
 }
 
 function handleFileUploadFromFiles(files) {
@@ -378,7 +378,7 @@ function handleFileUploadFromFiles(files) {
   });
 }
 
-// Drag and drop functions
+// Các hàm drag and drop
 function handleDragOver(e) {
   e.preventDefault();
   e.dataTransfer.dropEffect = "move";
@@ -387,17 +387,17 @@ function handleDragOver(e) {
 function handleDrop(e) {
   e.preventDefault();
 
-  // Clear all drag-over classes
+  // Xóa tất cả các lớp drag-over
   clearAllDragOverClasses();
 
-  // Handle file uploads from desktop
+  // Xử lý tải file từ desktop
   if (e.dataTransfer.files.length > 0) {
     const files = Array.from(e.dataTransfer.files);
     handleFileUploadFromFiles(files);
     return;
   }
 
-  // Handle internal file moves to current folder
+  // Xử lý di chuyển file nội bộ sang thư mục hiện tại
   const data = e.dataTransfer.getData("application/json");
   if (data) {
     const draggedItem = JSON.parse(data);
@@ -405,12 +405,12 @@ function handleDrop(e) {
   }
 }
 
-// File area drag and drop handlers (for moving files out of folders)
+// Các trình xử lý kéo thả khu vực file (để di chuyển file ra khỏi thư mục)
 function handleFileAreaDragOver(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  // Only show drop zone if we're not in root and dragging an internal file
+  // Chỉ hiển thị vùng thả nếu chúng ta không ở root và đang kéo một file nội bộ
   if (currentPath.length > 0) {
     const fileArea = document.querySelector(".file-area");
     if (fileArea) {
@@ -424,7 +424,7 @@ function handleFileAreaDragLeave(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  // Only remove if we're leaving the file area completely
+  // Chỉ xóa nếu chúng ta rời khỏi khu vực file hoàn toàn
   if (!e.currentTarget.contains(e.relatedTarget)) {
     const fileArea = document.querySelector(".file-area");
     if (fileArea) {
@@ -437,10 +437,10 @@ function handleFileAreaDrop(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  // Clear all drag-over classes
+  // Xóa tất cả các lớp drag-over
   clearAllDragOverClasses();
 
-  // Try to get data from different possible sources
+  // Cố gắng lấy dữ liệu từ các nguồn có thể
   let data = e.dataTransfer.getData("application/json");
   if (!data) {
     data = e.dataTransfer.getData("text/plain");
@@ -452,17 +452,17 @@ function handleFileAreaDrop(e) {
     try {
       draggedItem = JSON.parse(data);
     } catch (error) {
-      console.log("Could not parse dragged item data:", error);
+      console.log("Không thể phân tích dữ liệu mục được kéo:", error);
     }
   }
 
-  // Fallback to global variable
+  // Quay lại biến toàn cục
   if (!draggedItem && window.currentDraggedItem) {
     draggedItem = window.currentDraggedItem;
   }
 
   if (draggedItem) {
-    // Move to parent folder (one level up)
+    // Di chuyển đến thư mục cha (một cấp lên)
     if (currentPath.length > 0) {
       const parentPath = currentPath.slice(0, -1);
       moveItem(draggedItem, parentPath);
@@ -470,12 +470,12 @@ function handleFileAreaDrop(e) {
   }
 }
 
-// Breadcrumb drag and drop handlers (for moving files to parent folder)
+// Các trình xử lý kéo thả breadcrumb (để di chuyển file đến thư mục cha)
 function handleBreadcrumbDragOver(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  // Only show drop zone if we're not in root
+  // Chỉ hiển thị vùng thả nếu chúng ta không ở root
   if (currentPath.length > 0) {
     const currentPathElement = document.getElementById("currentPath");
     if (currentPathElement) {
@@ -489,7 +489,7 @@ function handleBreadcrumbDragLeave(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  // Only remove if we're leaving the breadcrumb completely
+  // Chỉ xóa nếu chúng ta rời khỏi breadcrumb hoàn toàn
   if (!e.currentTarget.contains(e.relatedTarget)) {
     const currentPathElement = document.getElementById("currentPath");
     if (currentPathElement) {
@@ -502,10 +502,10 @@ function handleBreadcrumbDrop(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  // Clear all drag-over classes
+  // Xóa tất cả các lớp drag-over
   clearAllDragOverClasses();
 
-  // Try to get data from different possible sources
+  // Cố gắng lấy dữ liệu từ các nguồn có thể
   let data = e.dataTransfer.getData("application/json");
   if (!data) {
     data = e.dataTransfer.getData("text/plain");
@@ -517,17 +517,17 @@ function handleBreadcrumbDrop(e) {
     try {
       draggedItem = JSON.parse(data);
     } catch (error) {
-      console.log("Could not parse dragged item data:", error);
+      console.log("Không thể phân tích dữ liệu mục được kéo:", error);
     }
   }
 
-  // Fallback to global variable
+  // Quay lại biến toàn cục
   if (!draggedItem && window.currentDraggedItem) {
     draggedItem = window.currentDraggedItem;
   }
 
   if (draggedItem) {
-    // Move to parent folder (one level up)
+    // Di chuyển đến thư mục cha (một cấp lên)
     if (currentPath.length > 0) {
       const parentPath = currentPath.slice(0, -1);
       moveItem(draggedItem, parentPath);
@@ -536,14 +536,14 @@ function handleBreadcrumbDrop(e) {
 }
 
 function handleDropOnFolder(e, targetFolderName) {
-  // Clear all drag-over classes
+  // Xóa tất cả các lớp drag-over
   clearAllDragOverClasses();
 
   const data = e.dataTransfer.getData("application/json");
   if (data) {
     const draggedItem = JSON.parse(data);
 
-    // Don't allow dropping on itself
+    // Không cho phép thả vào chính nó
     if (draggedItem.name === targetFolderName) {
       return;
     }
@@ -553,7 +553,7 @@ function handleDropOnFolder(e, targetFolderName) {
 }
 
 function moveItemToCurrentFolder(draggedItem) {
-  // Don't move if already in current folder
+  // Không di chuyển nếu đã ở thư mục hiện tại
   if (arraysEqual(draggedItem.sourcePath, currentPath)) {
     return;
   }
@@ -567,13 +567,13 @@ function moveItemToFolder(draggedItem, targetFolderName) {
 }
 
 function moveItem(draggedItem, targetPath) {
-  // Get source location
+  // Lấy vị trí nguồn
   let sourceFolder = fileSystem;
   for (const folder of draggedItem.sourcePath) {
     sourceFolder = sourceFolder[folder]?.children || sourceFolder[folder] || {};
   }
 
-  // Get target location
+  // Lấy vị trí đích
   let targetFolder = fileSystem;
   for (const folder of targetPath) {
     if (!targetFolder[folder]) {
@@ -583,19 +583,19 @@ function moveItem(draggedItem, targetPath) {
     targetFolder = targetFolder[folder].children || {};
   }
 
-  // Check if item exists in source
+  // Kiểm tra xem mục có tồn tại ở nguồn không
   if (!sourceFolder[draggedItem.name]) {
     alert("File/thư mục nguồn không tồn tại!");
     return;
   }
 
-  // Check if item already exists in target
+  // Kiểm tra xem mục đã tồn tại ở đích chưa
   if (targetFolder[draggedItem.name]) {
     alert("File/thư mục đã tồn tại trong thư mục đích!");
     return;
   }
 
-  // Move the item
+  // Di chuyển mục
   targetFolder[draggedItem.name] = sourceFolder[draggedItem.name];
   delete sourceFolder[draggedItem.name];
 
@@ -611,28 +611,28 @@ function arraysEqual(a, b) {
   return a.length === b.length && a.every((val, i) => val === b[i]);
 }
 
-// Function to clear all drag-over classes
+// Hàm để xóa tất cả các lớp drag-over
 function clearAllDragOverClasses() {
-  // Clear file area drag-over
+  // Xóa drag-over khu vực file
   const fileArea = document.querySelector(".file-area");
   if (fileArea) {
     fileArea.classList.remove("drag-over");
   }
 
-  // Clear breadcrumb drag-over
+  // Xóa drag-over breadcrumb
   const currentPathElement = document.getElementById("currentPath");
   if (currentPathElement) {
     currentPathElement.classList.remove("drag-over");
   }
 
-  // Clear all folder drag-over classes
+  // Xóa tất cả các lớp drag-over thư mục
   const dragOverFolders = document.querySelectorAll(".file-item.drag-over");
   dragOverFolders.forEach(folder => {
     folder.classList.remove("drag-over");
   });
 }
 
-// Search and filter functions
+// Các hàm tìm kiếm và lọc
 function handleSearch(e) {
   searchTerm = e.target.value.trim();
   renderFileList();
@@ -654,7 +654,7 @@ function clearFilters() {
   renderFileList();
 }
 
-// Context menu functions
+// Các hàm context menu
 function showContextMenu(x, y, name, type, item) {
   currentContextItem = { name, type, item };
   const contextMenu = document.getElementById("contextMenu");
@@ -683,7 +683,7 @@ function handleRename() {
       return;
     }
 
-    // Move item and keep reference
+    // Di chuyển mục và giữ reference
     current[newName] = current[oldName];
 
     // Nếu đối tượng tồn tại, cập nhật thuộc tính name bên trong object
@@ -712,7 +712,7 @@ function handleRename() {
       });
       if (ownerChanged) localStorage.setItem(ownerKey, JSON.stringify(ownerShared));
 
-      // Cập nhật global shared list (dùng để hiển thị cho người khác)
+      // Cập nhật danh sách chia sẻ toàn cục (dùng để hiển thị cho người khác)
       const globalShared = JSON.parse(localStorage.getItem("globalSharedFiles") || "[]");
       let globalChanged = false;
       globalShared.forEach((s) => {
@@ -723,7 +723,7 @@ function handleRename() {
       });
       if (globalChanged) localStorage.setItem("globalSharedFiles", JSON.stringify(globalShared));
     }
-    // ---------------------------------------------------------------------
+    // --- HẾT ---
 
     saveFileSystem();
     renderFileList();
@@ -822,7 +822,7 @@ function dataURLtoBlob(dataurl) {
   return new Blob([u8arr], { type: mime });
 }
 
-// Utility functions
+// Các hàm tiện ích
 function isImageFile(filename) {
   const imageExts = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".jfif", ".svg"];
   return imageExts.some((ext) => filename.toLowerCase().endsWith(ext));
@@ -853,7 +853,7 @@ function formatDate(dateString) {
   );
 }
 
-// Export for use in other modules
+// Xuất để sử dụng trong các module khác
 window.fileManager = {
   loadFileSystem,
   saveFileSystem,

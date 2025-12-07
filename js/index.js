@@ -10,15 +10,14 @@ sign_in_btn.addEventListener('click', () =>{
     container.classList.remove("sign-up-mode");
 });
 
-// Login page specific JavaScript
 document.addEventListener("DOMContentLoaded", () => {
-  // Check if user is already logged in
+  // Kiểm tra nếu người dùng đã đăng nhập
   if (window.auth.checkAuth()) {
     window.location.href = "dashboard.html";
     return;
   }
 
-  // Setup event listeners
+  // Thiết lập các sự kiện
   const signInForm = document.querySelector(".sign-in-form");
   const signUpForm = document.querySelector(".sign-up-form");
 

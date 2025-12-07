@@ -1,5 +1,6 @@
 let currentUser = null;
 
+// Hàm xử lý đăng nhập
 function handleLogin(e) {
   e.preventDefault();
   const username = document.querySelector('.sign-in-form input[placeholder="Tên đăng nhập"]').value.trim(),
@@ -11,6 +12,7 @@ function handleLogin(e) {
   }, localStorage.setItem("currentUser", JSON.stringify(currentUser)), addActivity("Đăng nhập hệ thống"), window.location.href = "dashboard.html") : alert("Tên đăng nhập hoặc mật khẩu không đúng!")
 }
 
+// Hàm xử lý đăng ký
 function handleRegister(e) {
   e.preventDefault();
   const username = document.querySelector('.sign-up-form input[placeholder="Tên đăng nhập"]').value.trim(),
@@ -28,10 +30,12 @@ function handleRegister(e) {
   }, localStorage.setItem("users", JSON.stringify(users)), alert("Đăng ký thành công! Vui lòng đăng nhập.")
 }
 
+// Hàm xử lý đăng xuất
 function handleLogout() {
   addActivity("Đăng xuất hệ thống"), currentUser = null, localStorage.removeItem("currentUser"), window.location.href = "index.html"
 }
 
+// Hàm kiểm tra xác thực người dùng
 function checkAuth() {
   const e = localStorage.getItem("currentUser");
   return !!e && (currentUser = JSON.parse(e), !0)
@@ -53,6 +57,8 @@ function addActivity(e) {
   }
   localStorage.setItem(`activities_${currentUser.username}`, JSON.stringify(activities))
 }
+
+// Xuất các hàm ra bên ngoài để sử dụng trong các file khác
 window.auth = {
   currentUser: () => currentUser,
   handleLogin: handleLogin,
