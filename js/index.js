@@ -13,7 +13,7 @@ sign_in_btn.addEventListener('click', () =>{
 document.addEventListener("DOMContentLoaded", () => {
   // Kiểm tra nếu người dùng đã đăng nhập
   if (window.auth.checkAuth()) {
-    window.location.href = "dashboard.html";
+    window.location.href = "main.html";
     return;
   }
 

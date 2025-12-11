@@ -9,7 +9,7 @@ function handleLogin(e) {
   users[username] && users[username].password === password ? (currentUser = {
     username: username,
     ...users[username]
-  }, localStorage.setItem("currentUser", JSON.stringify(currentUser)), addActivity("Đăng nhập hệ thống"), window.location.href = "dashboard.html") : alert("Tên đăng nhập hoặc mật khẩu không đúng!")
+  }, localStorage.setItem("currentUser", JSON.stringify(currentUser)), addActivity("Đăng nhập hệ thống"), window.location.href = "main.html") : alert("Tên đăng nhập hoặc mật khẩu không đúng!")
 }
 
 // Hàm xử lý đăng ký
